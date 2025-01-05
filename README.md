@@ -1,6 +1,6 @@
 # GERADOR-EXTRATOR-c-digos-de-barra
 Projeto para a disciplina introdução a técnicas de programação 
-# GERADOR E EXTRATOR DE CÓDIGOS DE BARRAS (EAN-8)
+
 
 ## Descrição
 Este projeto implementa um **Gerador** e um **Extrator** de códigos de barras no padrão **EAN-8** utilizando a linguagem C. O objetivo é permitir:
