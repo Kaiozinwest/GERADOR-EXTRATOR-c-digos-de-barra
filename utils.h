@@ -17,7 +17,7 @@ typedef struct {
 
 //funções
 bool validar_id(const char *id);
-void gerar_sequencia_binaria(const char *id, char *barras);
-
+char *gerar_sequencia_binaria(const char *id);
+void gerar_pbm(const char *sequencia_binaria, int larguraModulo, int altura, int espacamentoLateral, const char *nomeArquivo);
 
 #endif
