@@ -1,72 +1,26 @@
 # Gerador e Extrator de Código de Barras EAN-8
 
-Este projeto implementa dois programas em C para manipulação de códigos de barras no padrão EAN-8. O objetivo é gerar imagens de códigos de barras a partir de um identificador e extrair o identificador de arquivos de imagem no formato PBM.
+Este projeto implementa dois programas em C para manipulação de códigos de barras no padrão EAN-8. Ele permite gerar imagens de códigos de barras a partir de um identificador fornecido e extrair identificadores de imagens no formato PBM.
 
----
+Os dois programas são: 
+- **Gerador de Código de Barras**: cria um arquivo PBM com a representação do código de barras EAN-8.
+- **Extrator de Código de Barras**: lê um arquivo PBM contendo o código de barras e extrai o identificador.
 
-## Funcionalidades
+Para o gerador, é obrigatório fornecer o identificador. Há também parâmetros opcionais que permitem configurar a altura, largura das barras e nome do arquivo gerado. Por exemplo, ao executar o comando `./gerador 40170725 --altura 50 --largura 3 --saida codigo.pbm`, será gerado um arquivo chamado `codigo.pbm` contendo a representação gráfica do código de barras para o identificador `40170725`.
 
-1. **Gerar Código de Barras:**
-   - Gera um código de barras EAN-8 baseado em um identificador fornecido.
-   - Valida o identificador, incluindo o dígito verificador.
-   - Permite personalizar:
-     - Espaçamento lateral do código.
-     - Largura de cada barra.
-     - Altura da imagem.
-     - Nome do arquivo de saída.
+O formato do arquivo gerado segue o padrão PBM, onde cada barra preta é representada pelo valor `1` e cada espaço branco pelo valor `0`. O cabeçalho do arquivo inclui as dimensões da imagem. Um exemplo de conteúdo gerado seria:
 
-   **Exemplo:**
-   - Entrada do programa (linha de comando):
-     ```bash
-     ./gerador 40170725 --altura 50 --largura 3 --saida codigo.pbm
-     ```
-   - Resultado:
-     Um arquivo `codigo.pbm` no formato PBM que contém o código de barras gerado para o identificador `40170725`.
+P1 209 58 00000000000000000000 00001110001110110000 ...
 
-     O arquivo gerado contém:
-     ```
-     P1
-     209 58
-     000000000000000000000000
-     000011100011101100001110
-     ...
-     ```
 
----
+Para o extrator, você deve fornecer um arquivo PBM contendo o código de barras. O programa verificará se o arquivo é válido e, caso contenha um código de barras, exibirá o identificador correspondente. Por exemplo, ao executar o comando `./extrator codigo.pbm`, o programa exibirá no terminal a mensagem `Identificador: 40170725`.
 
-2. **Extrair Código de Barras:**
-   - Lê um arquivo PBM gerado pelo gerador.
-   - Verifica se o arquivo contém um código de barras válido.
-   - Extrai o identificador representado na imagem.
+Ambos os programas utilizam validações para garantir a integridade dos dados. No gerador, o identificador deve conter exatamente 8 dígitos, sendo que o último é o dígito verificador calculado a partir dos sete primeiros. Caso o identificador seja inválido, o programa exibirá uma mensagem de erro e encerrará a execução. Já no extrator, caso o arquivo PBM não contenha um código de barras válido, o programa informará que o código não foi encontrado.
 
-   **Exemplo:**
-   - Arquivo de entrada: `codigo.pbm`
-   - Entrada do programa (linha de comando):
-     ```bash
-     ./extrator codigo.pbm
-     ```
-   - Resultado:
-     O identificador é exibido no terminal:
-     ```
-     Identificador: 40170725
-     ```
+O formato PBM é ideal para representar códigos de barras devido à sua simplicidade. Ele suporta apenas duas cores: preto (`1`) e branco (`0`), permitindo a criação de imagens compactas e fáceis de processar. O código de barras é gerado com barras de largura fixa e espaçamento configurável, garantindo a compatibilidade com scanners.
 
----
+Para compilar e executar os programas, é necessário um compilador C, como o GCC, e um ambiente Linux ou compatível. Ambos os programas podem ser compilados separadamente e utilizam funções compartilhadas para manipulação do formato PBM e validação de dados.
 
-## Como Funciona
+Se desejar contribuir para o projeto, você pode fazer um fork do repositório, criar um branch para suas alterações e enviar um pull request. Para dúvidas ou melhorias, sinta-se à vontade para abrir uma issue.
 
-### 1. Gerador de Código de Barras
-- O programa recebe como entrada:
-  - **Identificador obrigatório**: O número que será transformado em código de barras.
-  - **Parâmetros opcionais**:
-    - `--altura`: Altura do código de barras em pixels (padrão: 50).
-    - `--largura`: Largura de cada barra em pixels (padrão: 3).
-    - `--saida`: Nome do arquivo PBM gerado (padrão: `codigo.pbm`).
-
-- Validação:
-  - O identificador deve conter 8 dígitos numéricos.
-  - O último dígito é validado como o dígito verificador.
-
-- Exemplo de Execução:
-  ```bash
-  ./gerador 40170725 --altura 50 --largura 3 --saida codigo.pbm
+Projeto desenvolvido por Kaio Zinwest.
