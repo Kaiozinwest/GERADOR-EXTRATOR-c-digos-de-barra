@@ -6,14 +6,7 @@
 #define LARGURA_PADRAO 3
 #define ALTURA_PADRAO 50
 #define ESPACO_LATERAL_PADRAO 4 
-#define NOME_ARQUIVO_PADRAO "Codigos_barras.pbm"
-
-typedef struct {
-    int largura_area;
-    int altura_codigo;
-    int espacamento;
-    char nome_arquivo;
-} Img_configs;
+#define NOME_ARQUIVO_PADRAO "Codigo_barras.pbm"
 
 //funções
 bool validar_id(const char *id);

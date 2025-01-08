@@ -6,14 +6,16 @@
 
 bool validar_id(const char *id){
     //verificar se há apenas dígitos
-    for(int i = 0; i < 8; i++){
+    for(int i = 0; i < strlen(id); i++){
         if(!isdigit(id[i])){
+            printf("Erro, o identificador deve possuir apenas dígitos. \n");
             return false;
         }
     }
 
     //verifica se possui extamente 8 dígitos
     if(strlen(id) != 8){
+        printf("Erro!, o identificador deve possuir exatamente 8 dígitos. \n");
         return false;
     }
 
@@ -30,7 +32,12 @@ bool validar_id(const char *id){
    
    //calculo do digito verificador 
    int digito_verificador = 10 - (soma % 10) % 10;
-   return (id[7] - '0') == digito_verificador;
+
+   if((id[7] - '0') != digito_verificador){
+        printf("O dígito verificador não corresponde a os dígitos anteriores! \n");
+        return false;
+   }
+   return true;
 }
 
 //gerar a sequencia de 0s e 1s
@@ -116,6 +123,16 @@ void gerar_pbm(const char *sequencia_binaria, int larguraModulo, int altura, int
         fprintf(arquivo, "\n");
     }
     fclose(arquivo);
+
+     // Converter PBM para imagem (ex: PNG) usando ImageMagick
+    char comando[256];
+    snprintf(comando, sizeof(comando), "convert %s %s.png", nomeArquivo, nomeArquivo);
+    if (system(comando) != 0) {
+        fprintf(stderr, "Erro ao converter o arquivo PBM para imagem.\n");
+    } else {
+        printf("Imagem gerada com sucesso: %s.png\n", nomeArquivo);
+    }
+    
 
     //liberar a matriz
     for (int i = 0; i < alturaTotal; i++){
