@@ -12,5 +12,8 @@
 bool validar_id(const char *id);
 char *gerar_sequencia_binaria(const char *id);
 void gerar_pbm(const char *sequencia_binaria, int larguraModulo, int altura, int espacamentoLateral, const char *nomeArquivo);
+bool verificar_arquivo_existente(const char *nome_arquivo);
+bool arquivo_existe(const char *nome_arquivo);
+bool verificar_cabecalho(FILE *arquivo, int *largura, int *altura);
 
 #endif

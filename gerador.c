@@ -31,6 +31,11 @@ int main(int argc, char *argv[]){
     
     const char *nome_arquivo = (argc > 5) ? argv[5] : NOME_ARQUIVO_PADRAO;
 
+    //verificar existencia do arquivo
+    if(!verificar_arquivo_existente(nome_arquivo)){
+        return EXIT_FAILURE;
+    }
+
     char *sequencia = gerar_sequencia_binaria(identificador);
     gerar_pbm(sequencia, largura, altura, espacamento, nome_arquivo);
     

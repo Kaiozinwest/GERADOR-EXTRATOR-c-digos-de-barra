@@ -140,3 +140,69 @@ void gerar_pbm(const char *sequencia_binaria, int larguraModulo, int altura, int
     }
     free(matriz);
 }
+
+bool arquivo_existe(const char *nome_arquivo){
+    FILE *arquivo = fopen(nome_arquivo, "r");
+    if(arquivo){
+        fclose(arquivo);
+        return true;
+    } else{
+        return false;
+    }
+}
+
+bool verificar_arquivo_existente(const char *nome_arquivo){
+    if(arquivo_existe(nome_arquivo)){
+        printf("Deseja sobreesvrever o arquivo? (S / N)");
+        char resposta;
+        scanf("%c", &resposta);
+        if(resposta != 's' && resposta != 'S'){
+            return false;
+        }
+    }
+    return true;
+}
+
+bool verificar_cabecalho(FILE *arquivo, int *largura, int *altura) {
+    char linha[256];
+
+    // Pular linhas ou espaços em branco no início do arquivo
+    int ch;
+    do {
+        ch = fgetc(arquivo);
+    } while (isspace(ch));
+
+    if (ch == EOF) {
+        fprintf(stderr, "Erro: O arquivo está vazio ou mal formatado.\n");
+        return false;
+    }
+
+    // Recolocar o caractere não espaço de volta no fluxo
+    ungetc(ch, arquivo);
+
+    // Ler o formato (primeira linha do arquivo)
+    if (!fgets(linha, sizeof(linha), arquivo)) {
+        fprintf(stderr, "Erro: Não foi possível ler o formato.\n");
+        return false;
+    }
+
+    // Remover caracteres invisíveis
+    linha[strcspn(linha, "\r\n")] = '\0';
+
+    // Verificar o formato P1
+    if (strcmp(linha, "P1") != 0) {
+        fprintf(stderr, "Erro: O arquivo não segue o formato PBM esperado (P1).\n");
+        return false;
+    }
+
+    // Ler as dimensões (segunda linha do arquivo)
+    if (!fgets(linha, sizeof(linha), arquivo) || sscanf(linha, "%d %d", largura, altura) != 2) {
+        fprintf(stderr, "Erro: Dimensões inválidas no cabeçalho do arquivo.\n");
+        return false;
+    }
+
+    return true; // Cabeçalho válido
+}
+
+
+
