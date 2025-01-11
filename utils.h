@@ -15,5 +15,10 @@ void gerar_pbm(const char *sequencia_binaria, int larguraModulo, int altura, int
 bool verificar_arquivo_existente(const char *nome_arquivo);
 bool arquivo_existe(const char *nome_arquivo);
 bool verificar_cabecalho(FILE *arquivo, int *largura, int *altura);
+bool carregar_matriz(FILE *arquivo, int largura, int altura, int **matriz);
+void imprimir_matriz(int **matriz, int largura, int altura);
+bool verificar_cabecalho(FILE *arquivo, int *largura, int *altura);
+bool verificar_marcadores(int **matriz, int largura, int altura, int N, char *sequencia_binaria);
+bool decodificar_digitos(const char *sequencia_binaria, char *identificador);
 
 #endif

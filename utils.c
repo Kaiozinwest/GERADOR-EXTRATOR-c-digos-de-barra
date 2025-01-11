@@ -200,9 +200,100 @@ bool verificar_cabecalho(FILE *arquivo, int *largura, int *altura) {
         fprintf(stderr, "Erro: Dimensões inválidas no cabeçalho do arquivo.\n");
         return false;
     }
-
+    printf("%d %d", *largura, *altura);
     return true; // Cabeçalho válido
 }
+
+
+
+
+
+bool verificar_marcadores(int **matriz, int largura, int altura, int N, char *sequencia_binaria) {
+    int margem = (largura - (N * 67)) / 2; // Espaço lateral
+    int pos = 0;
+
+    // Extrair a sequência binária
+    for (int i = margem; i < largura - margem; i += N) {
+        int soma = 0;
+        for (int j = i; j < i + N; j++) {
+            soma += matriz[altura / 2][j]; // Considerar linha central
+        }
+        sequencia_binaria[pos++] = (soma > (N / 2)) ? '1' : '0';
+    }
+    sequencia_binaria[pos] = '\0';
+
+    // Calcular índices dos marcadores
+    int inicio = 0;                     // Marcador inicial
+    int central = 3 + 28;               // Após marcador inicial + L-code
+    int fim = central + 5 + 28;         // Após marcador central + R-code
+
+    // Verificar marcadores
+    if (strncmp(&sequencia_binaria[inicio], "101", 3) != 0) {
+        printf("Erro: Marcador de início inválido.\n");
+        return false;
+    }
+
+    if (strncmp(&sequencia_binaria[central], "01010", 5) != 0) {
+        printf("Erro: Marcador central inválido.\n");
+        return false;
+    }
+
+    if (strncmp(&sequencia_binaria[fim], "101", 3) != 0) {
+        printf("Erro: Marcador de fim inválido.\n");
+        return false;
+    }
+
+    return true;
+}
+
+bool decodificar_digitos(const char *sequencia_binaria, char *identificador) {
+    const char *L_code[] = {"0001101", "0011001", "0010011", "0111101", "0100011", "0110001", "0101111", "0111011", "0110111", "0001011"};
+    const char *R_code[] = {"1110010", "1100110", "1101100", "1000010", "1011100", "1001110", "1010000", "1000100", "1001000", "1110100"};
+
+    int pos = 0;
+
+    // Decodificar L-code (4 primeiros dígitos)
+    for (int i = 3; i < 31; i += 7) {
+        bool encontrado = false;
+        for (int j = 0; j < 10; j++) {
+            if (strncmp(&sequencia_binaria[i], L_code[j], 7) == 0) {
+                identificador[pos++] = '0' + j;
+                encontrado = true;
+                break;
+            }
+        }
+        if (!encontrado) {
+            printf("Erro: Sequência L-code inválida.\n");
+            return false;
+        }
+    }
+
+    // Decodificar R-code (4 últimos dígitos)
+    for (int i = 36; i < 64; i += 7) {
+        bool encontrado = false;
+        for (int j = 0; j < 10; j++) {
+            if (strncmp(&sequencia_binaria[i], R_code[j], 7) == 0) {
+                identificador[pos++] = '0' + j;
+                encontrado = true;
+                break;
+            }
+        }
+        if (!encontrado) {
+            printf("Erro: Sequência R-code inválida.\n");
+            return false;
+        }
+    }
+
+    identificador[pos] = '\0';
+    return true;
+}
+
+
+
+
+
+
+
 
 
 
